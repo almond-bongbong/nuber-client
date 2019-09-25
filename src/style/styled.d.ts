@@ -1,9 +1,9 @@
 import 'styled-components'
 
 declare module 'styled-components' {
+  // tslint:disable-next-line:interface-name
   export interface DefaultTheme {
-    colors: {
-      blue:string;
-    }
+    blue:string;
+    grey:string;
   }
 }

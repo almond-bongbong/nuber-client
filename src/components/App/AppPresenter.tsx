@@ -4,7 +4,7 @@ import AddPlace from '../../routes/AddPlace';
 import EditAccount from '../../routes/EditAccount';
 import FindAddress from '../../routes/FindAddress';
 import Home from '../../routes/Home';
-import OutHome from '../../routes/OutHome';
+import Login from '../../routes/Login';
 import PhoneLogin from '../../routes/PhoneLogin';
 import Places from '../../routes/Places';
 import Ride from '../../routes/Ride';
@@ -24,7 +24,7 @@ const AppPresenter:React.FunctionComponent<IProp> = ({ isLoggedIn }) => (
 
 const LoggedOutRoutes:React.FunctionComponent = () => (
   <Switch>
-    <Route path="/" exact={true} component={OutHome} />
+    <Route path="/" exact={true} component={Login} />
     <Route path="/phone-login" component={PhoneLogin} />
     <Route path="/verify-phone/:number" component={VerifyPhone} />
     <Route path="/social-login" component={SocialLogin} />
