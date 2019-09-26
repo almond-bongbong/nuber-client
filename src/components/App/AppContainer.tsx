@@ -1,12 +1,14 @@
 import { useQuery } from '@apollo/react-hooks';
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '../../style/global-style';
 import { theme } from '../../style/theme';
 import AppPresenter from './AppPresenter';
-import { IS_LOGGED_IN } from './AppQueries';
+import { IS_LOGGED_IN } from './AppQueries.queries';
 
-const AppContainer = ():React.FunctionComponentElement<any> => {
+const AppContainer = (): React.FunctionComponentElement<any> => {
   const { data } = useQuery(IS_LOGGED_IN);
   return (
     <>
@@ -14,6 +16,7 @@ const AppContainer = ():React.FunctionComponentElement<any> => {
       <ThemeProvider theme={theme}>
         <AppPresenter isLoggedIn={data.auth.isLoggedIn} />
       </ThemeProvider>
+      <ToastContainer draggable={true} position="bottom-center" />
     </>
   );
 };
