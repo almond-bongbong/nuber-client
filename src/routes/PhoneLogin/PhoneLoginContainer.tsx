@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 import {
@@ -10,9 +10,8 @@ import {
 import PhoneLoginPresenter from './PhoneLoginPresenter';
 import { PHONE_SIGN_IN } from './PhoneQueries.queries';
 
-const PhoneLoginContainer: React.FunctionComponent<
-  RouteComponentProps<any>
-> = () => {
+const PhoneLoginContainer: React.FunctionComponent = () => {
+  const history = useHistory();
   const [countryCode, setCountryCode] = useState<string>('+82');
   const [phoneNumber, setPhoneNumber] = useState<string>('12345');
   const [mutation, { loading }] = useMutation<
@@ -41,24 +40,25 @@ const PhoneLoginContainer: React.FunctionComponent<
     event.preventDefault();
     console.log(countryCode, phoneNumber);
 
-    const isValid = /^\+[1-9]{1}[0-9]{7,11}$/.test(
+    const isValid = /^\+[1-9]{1}[0-9]{7,12}$/.test(
       `${countryCode}${phoneNumber}`,
     );
 
     console.log(isValid);
     if (isValid) {
-      const { data } = await mutation();
-
-      if (data) {
-        const { StartPhoneVerification } = data;
-
-        if (StartPhoneVerification.ok) {
-          return;
-        } else {
-          toast.error(StartPhoneVerification.error);
-        }
-        console.log(data);
-      }
+      history.push({ pathname: '/verify-phone' })
+      // const { data } = await mutation();
+      //
+      // if (data) {
+      //   const { StartPhoneVerification } = data;
+      //
+      //   if (StartPhoneVerification.ok) {
+      //     return;
+      //   } else {
+      //     toast.error(StartPhoneVerification.error);
+      //   }
+      //   console.log(data);
+      // }
     } else {
       toast.error('Please write a valid phone number');
     }

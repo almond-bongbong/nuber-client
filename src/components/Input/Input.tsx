@@ -29,11 +29,13 @@ interface IProps {
   name?: string;
   required?: boolean;
   placeholder?: string;
+  className?: string;
 }
 
 const Input: React.FunctionComponent<IProps> = ({
   value,
   onChange,
+  className,
   placeholder,
   type = 'text',
   name = '',
@@ -42,6 +44,7 @@ const Input: React.FunctionComponent<IProps> = ({
     type={type}
     value={value}
     name={name}
+    className={className}
     placeholder={placeholder}
     onChange={onChange}
   />
