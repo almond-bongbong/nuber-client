@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/react-hooks';
 import React, { useState } from 'react';
-import { RouteComponentProps, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 import {
@@ -8,17 +8,18 @@ import {
   startPhoneVerificationVariables,
 } from '../../types/api';
 import PhoneLoginPresenter from './PhoneLoginPresenter';
-import { PHONE_SIGN_IN } from './PhoneQueries.queries';
+import { PHONE_SIGN_IN } from './PhoneQueries';
 
 const PhoneLoginContainer: React.FunctionComponent = () => {
   const history = useHistory();
   const [countryCode, setCountryCode] = useState<string>('+82');
-  const [phoneNumber, setPhoneNumber] = useState<string>('12345');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const fullPhoneNumber = `${countryCode}${phoneNumber}`;
   const [mutation, { loading }] = useMutation<
     startPhoneVerification,
     startPhoneVerificationVariables
   >(PHONE_SIGN_IN, {
-    variables: { phoneNumber: `${countryCode}${phoneNumber}` },
+    variables: { phoneNumber: fullPhoneNumber },
   });
 
   const onInputChange: React.ChangeEventHandler<
@@ -38,27 +39,27 @@ const PhoneLoginContainer: React.FunctionComponent = () => {
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async event => {
     event.preventDefault();
-    console.log(countryCode, phoneNumber);
 
     const isValid = /^\+[1-9]{1}[0-9]{7,12}$/.test(
-      `${countryCode}${phoneNumber}`,
+      fullPhoneNumber,
     );
 
-    console.log(isValid);
     if (isValid) {
-      history.push({ pathname: '/verify-phone' })
-      // const { data } = await mutation();
-      //
-      // if (data) {
-      //   const { StartPhoneVerification } = data;
-      //
-      //   if (StartPhoneVerification.ok) {
-      //     return;
-      //   } else {
-      //     toast.error(StartPhoneVerification.error);
-      //   }
-      //   console.log(data);
-      // }
+      const { data } = await mutation();
+
+      if (data) {
+        const { StartPhoneVerification } = data;
+
+        if (StartPhoneVerification.ok) {
+          toast.success('SMS Sent!');
+          history.push({
+            pathname: '/verify-phone',
+            state: { phoneNumber: fullPhoneNumber },
+          });
+        } else {
+          toast.error(StartPhoneVerification.error);
+        }
+      }
     } else {
       toast.error('Please write a valid phone number');
     }

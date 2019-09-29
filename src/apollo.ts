@@ -1,5 +1,9 @@
 import ApolloClient, { Operation } from 'apollo-boost';
 
+export interface logUserInVariables {
+  token: string;
+}
+
 const client = new ApolloClient({
   clientState: {
     defaults: {

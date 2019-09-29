@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '../../style/global-style';
 import { theme } from '../../style/theme';
 import AppPresenter from './AppPresenter';
-import { IS_LOGGED_IN } from './AppQueries.queries';
+import { IS_LOGGED_IN } from './AppQueries.local';
 
 const AppContainer = (): React.FunctionComponentElement<any> => {
   const { data } = useQuery(IS_LOGGED_IN);
