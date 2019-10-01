@@ -1,6 +1,6 @@
 import ApolloClient, { Operation } from 'apollo-boost';
 
-export interface logUserInVariables {
+export interface ILogUserInVariables {
   token: string;
 }
 

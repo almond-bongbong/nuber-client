@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/react-hooks';
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { logUserInVariables } from '../../apollo';
+import { ILogUserInVariables } from '../../apollo';
 import Loader from '../../components/Loader';
 import { LOG_USER_IN } from '../../sharedQueries.local';
 import { facebookConnect, facebookConnectVariables } from '../../types/api';
@@ -16,7 +16,7 @@ const SocialLoginContainer: React.FunctionComponent<
     facebookConnect,
     facebookConnectVariables
   >(FACEBOOK_CONNECT);
-  const [loginMutation] = useMutation<any, logUserInVariables>(LOG_USER_IN);
+  const [loginMutation] = useMutation<any, ILogUserInVariables>(LOG_USER_IN);
 
   const handleFacebookConnect = async (userInfo: any) => {
     if (userInfo.accessToken) {
