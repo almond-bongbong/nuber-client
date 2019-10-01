@@ -1,7 +1,8 @@
 import React from 'react';
+import { MutationFunction } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { userProfile } from '../../types/api';
+import { toggleDriving, userProfile } from '../../types/api';
 
 const Container = styled.div`
   height: 100%;
@@ -65,7 +66,8 @@ interface IToggleProps {
 
 const ToggleDriving = styled.button<IToggleProps>`
   -webkit-appearance: none;
-  background-color: ${props => props.isDriving ? props.theme.yellow : props.theme.green};
+  background-color: ${props =>
+    props.isDriving ? props.theme.yellow : props.theme.green};
   width: 100%;
   color: white;
   font-size: 18px;
@@ -75,13 +77,22 @@ const ToggleDriving = styled.button<IToggleProps>`
 `;
 
 interface IProps {
-  data: userProfile | undefined
-  loading: boolean
+  data: userProfile | undefined;
+  loading: boolean;
+  toggleDrivingFn: MutationFunction<toggleDriving>;
 }
 
-const MenuPresenter: React.FunctionComponent<IProps> = ({ data, loading }) => {
+const MenuPresenter: React.FunctionComponent<IProps> = ({
+  data,
+  loading,
+  toggleDrivingFn,
+}) => {
   const { GetMyProfile } = data || {};
   const { user } = GetMyProfile || {};
+
+  const handleToggleDriving = async () => {
+    await toggleDrivingFn();
+  };
 
   return (
     <Container>
@@ -90,7 +101,12 @@ const MenuPresenter: React.FunctionComponent<IProps> = ({ data, loading }) => {
           <Header>
             <Grid>
               <Link to={'/edit-account'}>
-                <Image src={user.profilePhoto || ''}/>
+                <Image
+                  src={
+                    user.profilePhoto ||
+                    'https://icon-library.net/images/default-user-icon/default-user-icon-4.jpg'
+                  }
+                />
               </Link>
               <Text>
                 <Name>{user.fullName}</Name>
@@ -100,7 +116,7 @@ const MenuPresenter: React.FunctionComponent<IProps> = ({ data, loading }) => {
           </Header>
           <SLink to="/trips">Your Trips</SLink>
           <SLink to="/settings">Settings</SLink>
-          <ToggleDriving isDriving={true}>
+          <ToggleDriving isDriving={user.isDriving} onClick={handleToggleDriving}>
             {user.isDriving ? 'Stop driving' : 'Start driving'}
           </ToggleDriving>
         </>
