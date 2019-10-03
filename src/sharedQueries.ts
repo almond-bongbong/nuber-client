@@ -16,3 +16,18 @@ export const USER_PROFILE = gql`
         }
     }
 `;
+
+export const MY_PLACES = gql`
+    query myPlaces {
+        GetMyPlaces {
+            ok
+            error
+            places {
+                id
+                name
+                address
+                isFav
+            }
+        }
+    }
+`;

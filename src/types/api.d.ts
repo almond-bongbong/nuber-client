@@ -21,6 +21,55 @@ export interface toggleDriving {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: editPlace
+// ====================================================
+
+export interface editPlace_EditPlace {
+  __typename: "EditPlaceResponse";
+  ok: boolean;
+  error: string | null;
+}
+
+export interface editPlace {
+  EditPlace: editPlace_EditPlace;
+}
+
+export interface editPlaceVariables {
+  placeId: number;
+  isFav: boolean;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: addPlace
+// ====================================================
+
+export interface addPlace_AddPlace {
+  __typename: "AddPlaceResponse";
+  ok: boolean;
+  error: string | null;
+}
+
+export interface addPlace {
+  AddPlace: addPlace_AddPlace;
+}
+
+export interface addPlaceVariables {
+  name: string;
+  lat: number;
+  lng: number;
+  address: string;
+  isFav: boolean;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: updateProfile
 // ====================================================
 
@@ -140,6 +189,33 @@ export interface userProfile_GetMyProfile {
 
 export interface userProfile {
   GetMyProfile: userProfile_GetMyProfile;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: myPlaces
+// ====================================================
+
+export interface myPlaces_GetMyPlaces_places {
+  __typename: "Place";
+  id: number;
+  name: string;
+  address: string;
+  isFav: boolean;
+}
+
+export interface myPlaces_GetMyPlaces {
+  __typename: "GetMyPlacesResponse";
+  ok: boolean;
+  error: string | null;
+  places: (myPlaces_GetMyPlaces_places | null)[] | null;
+}
+
+export interface myPlaces {
+  GetMyPlaces: myPlaces_GetMyPlaces;
 }
 
 /* tslint:disable */

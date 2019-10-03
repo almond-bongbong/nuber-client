@@ -12,6 +12,7 @@ const MenuContainer = () => {
     update: (cache, result) => {
       if (result.data) {
         const { ToggleDrivingMode } = result.data;
+
         if (ToggleDrivingMode.ok) {
           const query: userProfile | null = cache.readQuery({
             query: USER_PROFILE,
@@ -26,7 +27,7 @@ const MenuContainer = () => {
               user!.isDriving = !user!.isDriving;
             }
           }
-          cache.writeQuery({ query: USER_PROFILE, data: false });
+          cache.writeQuery({ query: USER_PROFILE, data: query });
         } else {
           toast.error(ToggleDrivingMode.error);
         }

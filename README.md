@@ -12,10 +12,10 @@ Client for the (N)uber. ReactJS, Apollo, Typescript
     
 ### Logged In
 
-- [ ] Home
-- [ ] Ride
-- [ ] Edit Account
-- [ ] Settings
+- [x] Home
+- [x] Ride
+- [x] Edit Account
+- [x] Settings
 - [ ] Saved Places
 - [ ] Add Place
 - [ ] Find Address
