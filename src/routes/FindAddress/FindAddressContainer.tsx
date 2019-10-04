@@ -66,7 +66,7 @@ const FindAddressContainer: React.FC<IProps> = ({ google, history }) => {
       setAddress(location.formatted_address);
 
       if (map.current) {
-        map.current.setCenter(new google.maps.LatLng(location.lat, location.lng));
+        map.current.panTo(new google.maps.LatLng(location.lat, location.lng));
       }
     }
   };

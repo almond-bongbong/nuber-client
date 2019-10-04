@@ -33,7 +33,7 @@ const client = new ApolloClient({
       headers: { 'X-JWT': localStorage.getItem('jwt') || '' },
     });
   },
-  uri: 'http://localhost:4000/graphql',
+  uri: 'http://192.168.219.136:4000/graphql',
 });
 
 export default client;
