@@ -26,6 +26,7 @@ interface IProps {
   children: any;
   onClick?: any;
   disabled?: boolean;
+  className?: string;
 }
 
 const Button: React.FunctionComponent<IProps> = ({
@@ -33,8 +34,9 @@ const Button: React.FunctionComponent<IProps> = ({
   children,
   onClick,
   disabled = false,
+  className,
 }) => (
-  <Container type={type} disabled={disabled} onClick={onClick}>
+  <Container type={type} disabled={disabled} onClick={onClick} className={className}>
     {children}
   </Container>
 );

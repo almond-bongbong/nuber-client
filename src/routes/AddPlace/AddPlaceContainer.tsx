@@ -1,18 +1,18 @@
 import { useMutation } from '@apollo/react-hooks';
 import React, { ChangeEventHandler, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { MY_PLACES } from '../../sharedQueries';
 import { addPlace, addPlaceVariables } from '../../types/api';
 import AddPlacePresenter from './AddPlacePresenter';
 import { ADD_PLACE } from './AddPlaceQueries';
 
-const AddPlaceContainer = () => {
-  const history = useHistory();
-  const [address, setAddress] = useState<string>('');
+const AddPlaceContainer: React.FC<RouteComponentProps> = ({ location, history }) => {
+  const { state = {} } = location;
+  const [address, setAddress] = useState<string>(state.address || '');
   const [name, setName] = useState<string>('');
-  const [lat, setLat] = useState<number>(1.2);
-  const [lng, setLng] = useState<number>(1.2);
+  const [lat] = useState<number>(state.lat || 0);
+  const [lng] = useState<number>(state.lng || 0);
   const [addPlaceMutation, { loading }] = useMutation<
     addPlace,
     addPlaceVariables
@@ -65,6 +65,7 @@ const AddPlaceContainer = () => {
       name={name}
       loading={loading}
       onSubmit={submitAddPlace}
+      pickedAddress={lat !== 0 && lng !== 0 && name !== ''}
     />
   );
 };
