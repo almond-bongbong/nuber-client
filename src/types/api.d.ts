@@ -119,6 +119,68 @@ export interface reportMovementVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: getDrivers
+// ====================================================
+
+export interface getDrivers_GetNearbyDrivers_drivers {
+  __typename: "User";
+  id: number;
+  lastLat: number | null;
+  lastLng: number | null;
+}
+
+export interface getDrivers_GetNearbyDrivers {
+  __typename: "GetNearbyDriversResponse";
+  ok: boolean;
+  error: string | null;
+  drivers: (getDrivers_GetNearbyDrivers_drivers | null)[] | null;
+}
+
+export interface getDrivers {
+  GetNearbyDrivers: getDrivers_GetNearbyDrivers;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: requestRide
+// ====================================================
+
+export interface requestRide_RequestRide_ride {
+  __typename: "Ride";
+  id: number;
+}
+
+export interface requestRide_RequestRide {
+  __typename: "RequestRideResponse";
+  ok: boolean;
+  error: string | null;
+  ride: requestRide_RequestRide_ride | null;
+}
+
+export interface requestRide {
+  RequestRide: requestRide_RequestRide;
+}
+
+export interface requestRideVariables {
+  pickUpAddress: string;
+  pickUpLat: number;
+  pickUpLng: number;
+  dropOffAddress: string;
+  dropOffLat: number;
+  dropOffLng: number;
+  price: number;
+  distance: string;
+  duration: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: startPhoneVerification
 // ====================================================
 
@@ -152,7 +214,7 @@ export interface facebookConnect_FacebookConnect {
 }
 
 export interface facebookConnect {
-  FacebookConnect: facebookConnect_FacebookConnect | null;
+  FacebookConnect: facebookConnect_FacebookConnect;
 }
 
 export interface facebookConnectVariables {

@@ -1,7 +1,9 @@
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { GoogleAPI } from 'google-maps-react';
 import React, {
   ChangeEventHandler,
+  MutableRefObject,
+  RefObject,
   useCallback,
   useEffect,
   useMemo,
@@ -11,15 +13,22 @@ import React, {
 import { RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
-import { geoCode } from '../../mapHelpers';
+import { geoCode, reverseGeoCode } from '../../mapHelpers';
 import { USER_PROFILE } from '../../sharedQueries';
 import {
+  getDrivers,
   reportMovement,
   reportMovementVariables,
+  requestRide,
+  requestRideVariables,
   userProfile,
 } from '../../types/api';
 import HomePresenter from './HomePresenter';
-import { REPORT_LOCATION } from './HomeQueries';
+import {
+  GET_NEARBY_DRIVERS,
+  REPORT_LOCATION,
+  REQUEST_RIDE,
+} from './HomeQueries';
 
 interface IProps extends RouteComponentProps {
   google: GoogleAPI;
@@ -31,8 +40,11 @@ const HomeContainer: React.FC<IProps> = () => {
   const userMarker = useRef<google.maps.Marker>();
   const toMarker = useRef<google.maps.Marker>();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const { loading } = useQuery<userProfile>(USER_PROFILE);
-  const [toAddress, setToAddress] = useState('aia타워');
+  const { data: userProfileData, loading } = useQuery<userProfile>(
+    USER_PROFILE,
+  );
+  const [toAddress, setToAddress] = useState('');
+  const [fromAddress, setFromAddress] = useState('');
   const directions = useRef<google.maps.DirectionsRenderer>();
   const [pendingDirections, setPendingDirections] = useState(false);
   const [distance, setDistance] = useState<string>();
@@ -41,6 +53,64 @@ const HomeContainer: React.FC<IProps> = () => {
     reportMovement,
     reportMovementVariables
   >(REPORT_LOCATION);
+  const [getDriversQuery, { data: driversData }] = useLazyQuery<getDrivers>(
+    GET_NEARBY_DRIVERS,
+    { pollInterval: 1000 },
+  );
+  const driversMarker = useRef<google.maps.Marker[]>([]);
+  const [requestRideMutation, { loading: requestRideLoading }] = useMutation<
+    requestRide,
+    requestRideVariables
+  >(REQUEST_RIDE);
+
+  useEffect(() => {
+    if (driversData) {
+      const {
+        GetNearbyDrivers: { drivers },
+      } = driversData;
+
+      if (drivers) {
+        drivers.forEach(driver => {
+          if (driver && driver.lastLat && driver.lastLng) {
+            const existingDriver:
+              | google.maps.Marker
+              | undefined = driversMarker.current.find(marker => {
+              const markerId = marker.get('ID');
+              return markerId === driver.id;
+            });
+
+            if (existingDriver) {
+              existingDriver.setPosition({
+                lat: driver.lastLat,
+                lng: driver.lastLng,
+              });
+            } else {
+              const markerOptions: google.maps.MarkerOptions = {
+                icon: {
+                  path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                  scale: 5,
+                },
+                position: {
+                  lat: driver!.lastLat,
+                  lng: driver!.lastLng,
+                },
+              };
+
+              const newMarker: google.maps.Marker = new google.maps.Marker(
+                markerOptions,
+              );
+
+              if (map.current) {
+                newMarker.set('ID', driver.id);
+                newMarker.setMap(map.current);
+                driversMarker.current.push(newMarker);
+              }
+            }
+          }
+        });
+      }
+    }
+  }, [driversData]);
 
   const price: number | undefined = useMemo(() => {
     if (distance) {
@@ -48,9 +118,18 @@ const HomeContainer: React.FC<IProps> = () => {
     }
   }, [distance]);
 
+  useEffect(() => {
+    if (userProfileData) {
+      const { user } = userProfileData.GetMyProfile;
+
+      if (user && !user.isDriving) {
+        getDriversQuery();
+      }
+    }
+  }, [userProfileData, getDriversQuery]);
+
   const loadMap = useCallback(
     (latitude, longitude) => {
-      console.log('load map');
       const mapConfig: google.maps.MapOptions = {
         center: {
           lat: latitude,
@@ -76,34 +155,40 @@ const HomeContainer: React.FC<IProps> = () => {
     },
     [mapRef],
   );
-
   const handleGeoSuccess: PositionCallback = useCallback(
-    ({ coords }) => {
+    async ({ coords }) => {
       loadMap(coords.latitude, coords.longitude);
+      const address = await reverseGeoCode(coords.latitude, coords.longitude);
+      if (address) {
+        setFromAddress(address);
+      }
     },
     [loadMap],
   );
 
-  const handleGeoWatchSuccess: PositionCallback = useCallback(position => {
-    const {
-      coords: { latitude, longitude },
-    } = position;
-    const latLng = new google.maps.LatLng(latitude, longitude);
+  const handleGeoWatchSuccess: PositionCallback = useCallback(
+    position => {
+      const {
+        coords: { latitude, longitude },
+      } = position;
+      const latLng = new google.maps.LatLng(latitude, longitude);
 
-    if (userMarker.current) {
-      userMarker.current.setPosition(latLng);
-    }
-    if (map.current) {
-      map.current.panTo(latLng);
-    }
+      if (userMarker.current) {
+        userMarker.current.setPosition(latLng);
+      }
+      if (map.current) {
+        map.current.panTo(latLng);
+      }
 
-    reportMovementMutation({
-      variables: {
-        lat: latitude,
-        lng: longitude,
-      },
-    });
-  }, [reportMovementMutation]);
+      reportMovementMutation({
+        variables: {
+          lat: latitude,
+          lng: longitude,
+        },
+      });
+    },
+    [reportMovementMutation],
+  );
 
   const handleGeoError: PositionErrorCallback = useCallback(e => {
     console.error(e);
@@ -222,6 +307,35 @@ const HomeContainer: React.FC<IProps> = () => {
     });
   };
 
+  const submitRequestRide = async () => {
+    const fromLat = userMarker.current!.getPosition()!.lat();
+    const fromLng = userMarker.current!.getPosition()!.lng();
+    const toLat = toMarker.current!.getPosition()!.lat();
+    const toLng = toMarker.current!.getPosition()!.lng();
+
+    try {
+      if (distance && duration && price) {
+        await requestRideMutation({
+          variables: {
+            distance,
+            dropOffAddress: toAddress,
+            dropOffLat: toLat,
+            dropOffLng: toLng,
+            duration,
+            pickUpAddress: fromAddress,
+            pickUpLat: fromLat,
+            pickUpLng: fromLng,
+            price,
+          },
+        });
+      } else {
+        toast.warn('destination is invalid');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <>
       <HomePresenter
@@ -232,9 +346,11 @@ const HomeContainer: React.FC<IProps> = () => {
         toAddress={toAddress}
         onInputChange={handleInputAddress}
         onAddressSubmit={submitAddress}
+        onRequestRide={submitRequestRide}
         price={price}
+        user={userProfileData && userProfileData.GetMyProfile.user}
       />
-      {pendingDirections && <Loader />}
+      {(pendingDirections || requestRideLoading) && <Loader />}
     </>
   );
 };

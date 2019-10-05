@@ -126,9 +126,13 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "GetNearbyDriversResponse",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "GetNearbyDriversResponse",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2278,9 +2282,13 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "FacebookConnectResponse",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FacebookConnectResponse",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

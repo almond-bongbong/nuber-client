@@ -6,6 +6,10 @@ import AddressBar from '../../components/AddressBar';
 import Button from '../../components/Button';
 import Menu from '../../components/Menu';
 import { formatNumber } from '../../lib/number';
+import {
+  getDrivers_GetNearbyDrivers_drivers,
+  userProfile_GetMyProfile_user,
+} from '../../types/api';
 
 const Container = styled.div``;
 
@@ -52,9 +56,12 @@ interface IProps {
   toggleMenu: () => void;
   mapRef: React.RefObject<any>;
   toAddress: string;
-  onAddressSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onAddressSubmit: () => void;
+  onRequestRide: () => void;
   price?: number;
+  user?: userProfile_GetMyProfile_user | null;
+  drivers?: Array<getDrivers_GetNearbyDrivers_drivers | null> | null;
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
@@ -65,7 +72,9 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   mapRef,
   onInputChange,
   onAddressSubmit,
+  onRequestRide,
   price,
+  user,
 }) => (
   <Container>
     <Helmet>
@@ -84,20 +93,24 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
       }}
     >
       {!loading && <MenuButton onClick={toggleMenu}>|||</MenuButton>}
-      <AddressBar
-        name={'toAddress'}
-        onChange={onInputChange}
-        value={toAddress}
-        onBlur={() => null}
-      />
-      {price && (
-        <RequestButton onClick={onAddressSubmit} disabled={toAddress === ''}>
-          {`Request Ride (₩${formatNumber(price)})`}
-        </RequestButton>
+      {user && !user.isDriving && (
+        <>
+          <AddressBar
+            name={'toAddress'}
+            onChange={onInputChange}
+            value={toAddress}
+            onBlur={() => null}
+          />
+          {price && (
+            <RequestButton onClick={onRequestRide} disabled={toAddress === ''}>
+              {`Request Ride (₩${formatNumber(price)})`}
+            </RequestButton>
+          )}
+          <ExtendedButton onClick={onAddressSubmit} disabled={toAddress === ''}>
+            {price ? 'Change address' : 'Pick Address'}
+          </ExtendedButton>
+        </>
       )}
-      <ExtendedButton onClick={onAddressSubmit} disabled={toAddress === ''}>
-        {price ? 'Change address' : 'Pick Address'}
-      </ExtendedButton>
       <Map ref={mapRef} />
     </Sidebar>
   </Container>
