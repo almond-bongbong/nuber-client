@@ -5,9 +5,11 @@ import styled from 'styled-components';
 import AddressBar from '../../components/AddressBar';
 import Button from '../../components/Button';
 import Menu from '../../components/Menu';
+import RidePopUp from '../../components/RidePopup';
 import { formatNumber } from '../../lib/number';
 import {
   getDrivers_GetNearbyDrivers_drivers,
+  getNearByRides_GetNearByRide_ride,
   userProfile_GetMyProfile_user,
 } from '../../types/api';
 
@@ -60,8 +62,11 @@ interface IProps {
   onAddressSubmit: () => void;
   onRequestRide: () => void;
   price?: number;
+  isDriver: boolean;
   user?: userProfile_GetMyProfile_user | null;
   drivers?: Array<getDrivers_GetNearbyDrivers_drivers | null> | null;
+  nearbyRide?: getNearByRides_GetNearByRide_ride | null;
+  onAcceptRide: (rideId: number) => void;
 }
 
 const HomePresenter: React.FunctionComponent<IProps> = ({
@@ -74,7 +79,9 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
   onAddressSubmit,
   onRequestRide,
   price,
-  user,
+  isDriver,
+  nearbyRide,
+  onAcceptRide,
 }) => (
   <Container>
     <Helmet>
@@ -93,7 +100,7 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
       }}
     >
       {!loading && <MenuButton onClick={toggleMenu}>|||</MenuButton>}
-      {user && !user.isDriving && (
+      {!isDriver && (
         <>
           <AddressBar
             name={'toAddress'}
@@ -110,6 +117,19 @@ const HomePresenter: React.FunctionComponent<IProps> = ({
             {price ? 'Change address' : 'Pick Address'}
           </ExtendedButton>
         </>
+      )}
+      {nearbyRide && (
+        <RidePopUp
+          pickUpAddress={nearbyRide.pickUpAddress}
+          dropOffAddress={nearbyRide.dropOffAddress}
+          price={nearbyRide.price}
+          distance={nearbyRide.distance}
+          duration={nearbyRide.duration}
+          passengerName={nearbyRide.passenger.fullName}
+          passengerPhoto={nearbyRide.passenger.profilePhoto}
+          acceptRideFn={onAcceptRide}
+          id={nearbyRide.id}
+        />
       )}
       <Map ref={mapRef} />
     </Sidebar>

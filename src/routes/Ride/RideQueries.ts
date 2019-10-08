@@ -1,0 +1,72 @@
+import { gql } from 'apollo-boost';
+
+export const GET_RIDE = gql`
+    query getRide (
+        $rideId: Int!
+    ) {
+        GetRide(
+            rideId: $rideId
+        ) {
+            ok
+            error
+            ride {
+                status
+                pickUpAddress
+                dropOffAddress
+                price
+                distance
+                duration
+                driver {
+                    id
+                    fullName
+                    profilePhoto
+                }
+                passenger {
+                    id
+                    fullName
+                    profilePhoto
+                }
+                chatId
+            }
+        }
+    }
+`;
+
+export const RIDE_SUBSCRIPTION = gql`
+    subscription rideUpdates {
+        RideStatusSubscription {
+            status
+            pickUpAddress
+            dropOffAddress
+            price
+            distance
+            duration
+            driver {
+                id
+                fullName
+                profilePhoto
+            }
+            passenger {
+                id
+                fullName
+                profilePhoto
+            }
+            chatId
+        }
+    }
+`;
+
+export const UPDATE_RIDE_STATUS = gql`
+    mutation updateRide(
+        $rideId: Int!
+        $status: StatusOption!
+    ) {
+        UpdateRideStatus(
+            rideId: $rideId
+            status: $status
+        ) {
+            ok
+            error
+        }
+    }
+`;

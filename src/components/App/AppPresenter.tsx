@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import AddPlace from '../../routes/AddPlace';
+import Chat from '../../routes/Chat';
 import EditAccount from '../../routes/EditAccount';
 import FindAddress from '../../routes/FindAddress';
 import Home from '../../routes/Home';
@@ -35,7 +36,8 @@ const LoggedOutRoutes:React.FunctionComponent = () => (
 const LoggedInRoutes:React.FunctionComponent = () => (
   <Switch>
     <Route path="/" exact={true} component={Home} />
-    <Route path="/ride" component={Ride} />
+    <Route path="/ride/:rideId?" component={Ride} />
+    <Route path="/chat/:chatId?" component={Chat} />
     <Route path="/edit-account" component={EditAccount} />
     <Route path="/settings" component={Settings} />
     <Route path="/places" component={Places} />

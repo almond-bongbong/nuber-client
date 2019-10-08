@@ -62,3 +62,55 @@ export const REQUEST_RIDE = gql`
         }
     }
 `;
+
+export const GET_NEARBY_RIDE = gql`
+  query getNearByRides {
+      GetNearByRide {
+          ok
+          error
+          ride {
+              id
+              pickUpAddress
+              dropOffAddress
+              price
+              distance
+              duration
+              passenger {
+                  fullName
+                  profilePhoto
+              }
+          }
+      }
+  }
+`;
+
+export const ACCEPT_RIDE = gql`
+    mutation acceptRide(
+        $rideId: Int!
+    ) {
+        UpdateRideStatus(
+            rideId: $rideId
+            status: ACCEPTED
+        ) {
+            ok
+            error
+        }
+    }
+`;
+
+export const SUBSCRIBE_NEARBY_RIDES = gql`
+    subscription nearByRides {
+        NearByRideSubscription {
+            id
+            pickUpAddress
+            dropOffAddress
+            price
+            distance
+            duration
+            passenger {
+                fullName
+                profilePhoto
+            }
+        }
+    }
+`;

@@ -1,21 +1,15 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
 import { GoogleAPI } from 'google-maps-react';
-import React, {
-  ChangeEventHandler,
-  MutableRefObject,
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import _ from 'lodash';
+import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useRef, useState, } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../components/Loader';
 import { geoCode, reverseGeoCode } from '../../mapHelpers';
 import { USER_PROFILE } from '../../sharedQueries';
 import {
+  acceptRide,
+  acceptRideVariables,
   getDrivers,
   reportMovement,
   reportMovementVariables,
@@ -25,16 +19,19 @@ import {
 } from '../../types/api';
 import HomePresenter from './HomePresenter';
 import {
+  ACCEPT_RIDE,
   GET_NEARBY_DRIVERS,
+  GET_NEARBY_RIDE,
   REPORT_LOCATION,
   REQUEST_RIDE,
+  SUBSCRIBE_NEARBY_RIDES,
 } from './HomeQueries';
 
 interface IProps extends RouteComponentProps {
   google: GoogleAPI;
 }
 
-const HomeContainer: React.FC<IProps> = () => {
+const HomeContainer: React.FC<IProps> = ({ history }) => {
   const mapRef = useRef<HTMLDivElement>();
   const map = useRef<google.maps.Map>();
   const userMarker = useRef<google.maps.Marker>();
@@ -55,13 +52,39 @@ const HomeContainer: React.FC<IProps> = () => {
   >(REPORT_LOCATION);
   const [getDriversQuery, { data: driversData }] = useLazyQuery<getDrivers>(
     GET_NEARBY_DRIVERS,
-    { pollInterval: 1000 },
+    // { pollInterval: 2000 },
   );
   const driversMarker = useRef<google.maps.Marker[]>([]);
   const [requestRideMutation, { loading: requestRideLoading }] = useMutation<
     requestRide,
     requestRideVariables
   >(REQUEST_RIDE);
+  const [
+    getNearbyRideQuery,
+    { data: nearbyRideData, subscribeToMore: nearbyRideSubscribe },
+  ] = useLazyQuery(GET_NEARBY_RIDE);
+  const [isDriver, setIsDriver] = useState<boolean>(false);
+  const [acceptRideMutation, { loading: acceptRideLoading }] = useMutation<
+    acceptRide,
+    acceptRideVariables
+  >(ACCEPT_RIDE);
+
+  useEffect(() => {
+    if (isDriver && nearbyRideData) {
+      nearbyRideSubscribe({
+        document: SUBSCRIBE_NEARBY_RIDES,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (subscriptionData.data) {
+            const newObj = _.cloneDeep(prev);
+            newObj.GetNearByRide.ride = subscriptionData.data.NearByRideSubscription;
+            return newObj;
+          } else {
+            return prev;
+          }
+        },
+      });
+    }
+  }, [isDriver, nearbyRideData, nearbyRideSubscribe]);
 
   useEffect(() => {
     if (driversData) {
@@ -122,11 +145,16 @@ const HomeContainer: React.FC<IProps> = () => {
     if (userProfileData) {
       const { user } = userProfileData.GetMyProfile;
 
-      if (user && !user.isDriving) {
-        getDriversQuery();
+      if (user) {
+        if (user.isDriving) {
+          setIsDriver(true);
+          getNearbyRideQuery();
+        } else {
+          getDriversQuery();
+        }
       }
     }
-  }, [userProfileData, getDriversQuery]);
+  }, [userProfileData, getDriversQuery, getNearbyRideQuery, nearbyRideSubscribe]);
 
   const loadMap = useCallback(
     (latitude, longitude) => {
@@ -315,7 +343,7 @@ const HomeContainer: React.FC<IProps> = () => {
 
     try {
       if (distance && duration && price) {
-        await requestRideMutation({
+        const response = await requestRideMutation({
           variables: {
             distance,
             dropOffAddress: toAddress,
@@ -328,8 +356,37 @@ const HomeContainer: React.FC<IProps> = () => {
             price,
           },
         });
+
+        if (response.data) {
+          const { RequestRide } = response.data;
+          if (RequestRide.ok && RequestRide.ride) {
+            toast.success('Drive requested, finding a driver');
+            history.push(`/ride/${RequestRide.ride.id}`);
+          } else {
+            toast.error(RequestRide.error);
+          }
+        }
       } else {
-        toast.warn('destination is invalid');
+        toast.warn('Destination is invalid');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleAcceptRide = async (rideId: number) => {
+    try {
+      const response = await acceptRideMutation({
+        variables: {
+          rideId,
+        },
+      });
+      if (response.data) {
+        const { UpdateRideStatus } = response.data;
+
+        if (UpdateRideStatus.ok) {
+          history.push(`/ride/${rideId}`);
+        }
       }
     } catch (e) {
       console.error(e);
@@ -348,9 +405,13 @@ const HomeContainer: React.FC<IProps> = () => {
         onAddressSubmit={submitAddress}
         onRequestRide={submitRequestRide}
         price={price}
-        user={userProfileData && userProfileData.GetMyProfile.user}
+        isDriver={isDriver}
+        nearbyRide={nearbyRideData && nearbyRideData.GetNearByRide.ride}
+        onAcceptRide={handleAcceptRide}
       />
-      {(pendingDirections || requestRideLoading) && <Loader />}
+      {(pendingDirections || requestRideLoading || acceptRideLoading) && (
+        <Loader />
+      )}
     </>
   );
 };

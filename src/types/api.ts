@@ -70,6 +70,94 @@ export interface addPlaceVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: getChat
+// ====================================================
+
+export interface getChat_GetChat_chat_messages {
+  __typename: "Message";
+  id: number;
+  text: string;
+  userId: number;
+}
+
+export interface getChat_GetChat_chat {
+  __typename: "Chat";
+  id: number;
+  passengerId: number;
+  driverId: number;
+  messages: (getChat_GetChat_chat_messages | null)[] | null;
+}
+
+export interface getChat_GetChat {
+  __typename: "GetChatResponse";
+  ok: boolean;
+  error: string | null;
+  chat: getChat_GetChat_chat | null;
+}
+
+export interface getChat {
+  GetChat: getChat_GetChat;
+}
+
+export interface getChatVariables {
+  chatId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: sendMessage
+// ====================================================
+
+export interface sendMessage_SendChatMessage_message {
+  __typename: "Message";
+  id: number;
+  text: string;
+  userId: number;
+}
+
+export interface sendMessage_SendChatMessage {
+  __typename: "SendChatMessageResponse";
+  ok: boolean;
+  error: string | null;
+  message: sendMessage_SendChatMessage_message | null;
+}
+
+export interface sendMessage {
+  SendChatMessage: sendMessage_SendChatMessage;
+}
+
+export interface sendMessageVariables {
+  text: string;
+  chatId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL subscription operation: messageSubscription
+// ====================================================
+
+export interface messageSubscription_MessageSubscription {
+  __typename: "Message";
+  id: number;
+  text: string;
+  userId: number;
+}
+
+export interface messageSubscription {
+  MessageSubscription: messageSubscription_MessageSubscription | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: updateProfile
 // ====================================================
 
@@ -315,7 +403,7 @@ export interface getRide_GetRide_ride {
   price: number;
   distance: string;
   duration: string;
-  driver: getRide_GetRide_ride_driver;
+  driver: getRide_GetRide_ride_driver | null;
   passenger: getRide_GetRide_ride_passenger;
   chatId: number | null;
 }
@@ -365,7 +453,7 @@ export interface rideUpdates_RideStatusSubscription {
   price: number;
   distance: string;
   duration: string;
-  driver: rideUpdates_RideStatusSubscription_driver;
+  driver: rideUpdates_RideStatusSubscription_driver | null;
   passenger: rideUpdates_RideStatusSubscription_passenger;
   chatId: number | null;
 }
