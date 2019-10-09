@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.js": "/static/js/main.abaa3546.chunk.js",
-    "main.js.map": "/static/js/main.abaa3546.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.fd975c26.js",
-    "runtime-main.js.map": "/static/js/runtime-main.fd975c26.js.map",
-    "static/css/2.b1119605.chunk.css": "/static/css/2.b1119605.chunk.css",
-    "static/js/2.ca3d6c02.chunk.js": "/static/js/2.ca3d6c02.chunk.js",
-    "static/js/2.ca3d6c02.chunk.js.map": "/static/js/2.ca3d6c02.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.dec38171da65125014b5b19bd964b803.js": "/precache-manifest.dec38171da65125014b5b19bd964b803.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.b1119605.chunk.css.map": "/static/css/2.b1119605.chunk.css.map",
-    "static/media/bg.png": "/static/media/bg.f1662d11.png"
+    "main.js": "/nuber-client/static/js/main.abaa3546.chunk.js",
+    "main.js.map": "/nuber-client/static/js/main.abaa3546.chunk.js.map",
+    "runtime-main.js": "/nuber-client/static/js/runtime-main.89de7bdd.js",
+    "runtime-main.js.map": "/nuber-client/static/js/runtime-main.89de7bdd.js.map",
+    "static/css/2.b1119605.chunk.css": "/nuber-client/static/css/2.b1119605.chunk.css",
+    "static/js/2.edd19831.chunk.js": "/nuber-client/static/js/2.edd19831.chunk.js",
+    "static/js/2.edd19831.chunk.js.map": "/nuber-client/static/js/2.edd19831.chunk.js.map",
+    "index.html": "/nuber-client/index.html",
+    "precache-manifest.a6d75b43842ab8a6b1d27c033757cd4b.js": "/nuber-client/precache-manifest.a6d75b43842ab8a6b1d27c033757cd4b.js",
+    "service-worker.js": "/nuber-client/service-worker.js",
+    "static/css/2.b1119605.chunk.css.map": "/nuber-client/static/css/2.b1119605.chunk.css.map",
+    "static/media/bg.png": "/nuber-client/static/media/bg.f1662d11.png"
   }
 }
