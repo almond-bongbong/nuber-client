@@ -58,7 +58,12 @@ const combinedLinks = split(
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => {
-      toast.error(`Unexpected error: ${message}`);
+      console.log(message);
+      if (message === 'No JWT. I refuse to proceed') {
+        toast.error(`Unexpected error: ${message}`);
+        localStorage.removeItem('jwt');
+        window.location.replace('/');
+      }
     });
   }
   if (networkError) {

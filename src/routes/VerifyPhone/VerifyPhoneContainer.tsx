@@ -39,11 +39,15 @@ const VerifyPhoneContainer: React.FunctionComponent<RouteComponentProps> = ({
         const { CompletePhoneVerification } = data;
 
         if (CompletePhoneVerification.ok) {
-          toast.success("You're verified, login now");
-          await loginMutation({
-            variables: { token: CompletePhoneVerification.token },
-          });
-          history.replace('/');
+          if (CompletePhoneVerification.token) {
+            toast.success("You're verified, login now");
+            await loginMutation({
+              variables: { token: CompletePhoneVerification.token },
+            });
+            history.replace('/');
+          } else {
+            console.log('profile 화면으로 이동하여 계속 진행');
+          }
         } else {
           toast.error(CompletePhoneVerification.error);
         }

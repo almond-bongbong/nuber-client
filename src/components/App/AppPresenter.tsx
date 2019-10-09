@@ -3,6 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import AddPlace from '../../routes/AddPlace';
 import Chat from '../../routes/Chat';
 import EditAccount from '../../routes/EditAccount';
+import EmailLogin from '../../routes/EmailLogin';
 import FindAddress from '../../routes/FindAddress';
 import Home from '../../routes/Home';
 import Login from '../../routes/Login';
@@ -29,6 +30,7 @@ const LoggedOutRoutes:React.FunctionComponent = () => (
     <Route path="/phone-login" component={PhoneLogin} />
     <Route path="/verify-phone" component={VerifyPhone} />
     <Route path="/social-login" component={SocialLogin} />
+    <Route path="/email-login" component={EmailLogin} />
     <Redirect from={"*"} to="/" />
   </Switch>
 );
@@ -43,6 +45,7 @@ const LoggedInRoutes:React.FunctionComponent = () => (
     <Route path="/places" component={Places} />
     <Route path="/add-place" component={AddPlace} />
     <Route path="/find-address" component={FindAddress} />
+    <Redirect from={"*"} to="/" />
   </Switch>
 );
 

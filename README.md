@@ -12,13 +12,14 @@ Client for the (N)uber. ReactJS, Apollo, Typescript
     
 ### Logged In
 
-- [ ] Home
-- [ ] Ride
-- [ ] Chat
+- [x] Home
+- [x] Ride
+- [x] Chat
 - [x] Edit Account
 - [x] Settings
 - [x] Add Place
 - [x] Find Address
-- [ ] Challenge: Ride Hstory
 - [ ] Challenge: Email Sign In
+- [ ] Challenge: Profile sign sp after phone verify
+- [ ] Challenge: Ride Hstory
  

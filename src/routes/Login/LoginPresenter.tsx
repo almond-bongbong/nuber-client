@@ -89,6 +89,11 @@ const LoginPresenter:React.FunctionComponent<IProps> = () => (
           <SocialLink>Or connect with social</SocialLink>
         </SocialLogin>
       </Link>
+      <Link to={"/email-login"}>
+        <SocialLogin>
+          <SocialLink>Or connect with email</SocialLink>
+        </SocialLogin>
+      </Link>
     </Footer>
   </Container>
 );

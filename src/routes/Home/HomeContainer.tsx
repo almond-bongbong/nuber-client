@@ -52,7 +52,7 @@ const HomeContainer: React.FC<IProps> = ({ history }) => {
   >(REPORT_LOCATION);
   const [getDriversQuery, { data: driversData }] = useLazyQuery<getDrivers>(
     GET_NEARBY_DRIVERS,
-    // { pollInterval: 2000 },
+    { pollInterval: 2000 },
   );
   const driversMarker = useRef<google.maps.Marker[]>([]);
   const [requestRideMutation, { loading: requestRideLoading }] = useMutation<
