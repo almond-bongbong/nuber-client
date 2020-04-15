@@ -33,7 +33,7 @@ const authMiddleware = new ApolloLink((operation: Operation, forward: any) => {
 });
 
 const httpLink = new HttpLink({
-  uri: 'https://192.168.219.136:4000/graphql',
+  uri: process.env.REACT_APP_GQL_URL,
 });
 
 const wsLink = new WebSocketLink({
@@ -43,7 +43,7 @@ const wsLink = new WebSocketLink({
     },
     reconnect: true,
   },
-  uri: 'wss://192.168.219.136:4000/subscription',
+  uri: process.env.REACT_APP_WS_URL!,
 });
 
 const combinedLinks = split(
