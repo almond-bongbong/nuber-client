@@ -31,7 +31,6 @@ const LoggedOutRoutes:React.FunctionComponent = () => (
     <Route path="/verify-phone" component={VerifyPhone} />
     <Route path="/social-login" component={SocialLogin} />
     <Route path="/email-login" component={EmailLogin} />
-    {/*<Redirect from={"*"} to="/" />*/}
   </Switch>
 );
 
@@ -45,7 +44,6 @@ const LoggedInRoutes:React.FunctionComponent = () => (
     <Route path="/places" component={Places} />
     <Route path="/add-place" component={AddPlace} />
     <Route path="/find-address" component={FindAddress} />
-    {/*<Redirect from={"*"} to="/" />*/}
   </Switch>
 );
 
