@@ -1,15 +1,15 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ce5242cd64a5b22eaf7368d25f4ecc84",
+    "revision": "98f40b64728d04e00502f7c33fe39532",
     "url": "/nuber-client/index.html"
   },
   {
-    "revision": "ca05b7324f32d7247a0e",
+    "revision": "3666cf09deb3ef587017",
     "url": "/nuber-client/static/css/2.b1119605.chunk.css"
   },
   {
-    "revision": "ca05b7324f32d7247a0e",
-    "url": "/nuber-client/static/js/2.cbed1733.chunk.js"
+    "revision": "3666cf09deb3ef587017",
+    "url": "/nuber-client/static/js/2.4ab5320f.chunk.js"
   },
   {
     "revision": "7effc07256549ced126f",
