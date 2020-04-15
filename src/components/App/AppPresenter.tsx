@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
 import AddPlace from '../../routes/AddPlace';
 import Chat from '../../routes/Chat';
 import EditAccount from '../../routes/EditAccount';
@@ -31,7 +31,7 @@ const LoggedOutRoutes:React.FunctionComponent = () => (
     <Route path="/verify-phone" component={VerifyPhone} />
     <Route path="/social-login" component={SocialLogin} />
     <Route path="/email-login" component={EmailLogin} />
-    {/*<Redirect from={"*"} to="/" />*/}
+    <Redirect from={"*"} to="/" />
   </Switch>
 );
 
@@ -45,7 +45,7 @@ const LoggedInRoutes:React.FunctionComponent = () => (
     <Route path="/places" component={Places} />
     <Route path="/add-place" component={AddPlace} />
     <Route path="/find-address" component={FindAddress} />
-    {/*<Redirect from={"*"} to="/" />*/}
+    <Redirect from={"*"} to="/" />
   </Switch>
 );
 

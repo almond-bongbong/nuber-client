@@ -59,6 +59,7 @@
     "eject": "react-scripts eject",
     "precodegen": "apollo schema:download --skipSSLValidation --endpoint=https://localhost:4000/graphql",
     "codegen": "apollo codegen:generate src/types/api.ts --queries='src/**/!(*.local).ts' --addTypename --localSchemaFile=schema.json --target typescript --outputFlat",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
