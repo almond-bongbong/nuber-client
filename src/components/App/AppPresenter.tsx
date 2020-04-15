@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
 import AddPlace from '../../routes/AddPlace';
 import Chat from '../../routes/Chat';
 import EditAccount from '../../routes/EditAccount';
@@ -19,9 +19,9 @@ interface IProp {
 }
 
 const AppPresenter:React.FunctionComponent<IProp> = ({ isLoggedIn }) => (
-  <BrowserRouter>
+  <HashRouter>
     {isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}
-  </BrowserRouter>
+  </HashRouter>
 );
 
 const LoggedOutRoutes:React.FunctionComponent = () => (
