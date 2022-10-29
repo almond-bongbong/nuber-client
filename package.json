@@ -41,7 +41,7 @@
     "react-simple-toasts": "^1.0.1",
     "react-toastify": "^5.4.0",
     "styled-components": "^4.4.0",
-    "styled-reset": "^4.0.1",
+    "styled-reset": "^4.4.2",
     "subscriptions-transport-ws": "^0.9.16",
     "typescript": "^3.6.3"
   },
