@@ -16,7 +16,7 @@
     "@types/react-router-dom": "^5.1.0",
     "@types/react-sidebar": "^3.0.0",
     "@types/styled-components": "^4.1.19",
-    "apollo": "^2.18.3",
+    "apollo": "^2.34.0",
     "apollo-boost": "^0.4.4",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
